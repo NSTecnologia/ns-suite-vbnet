@@ -110,8 +110,10 @@
     <Compile Include="src\Requisições\BPe\ConsSitReqBPe.vb" />
     <Compile Include="src\Requisições\CTe\ListarNSNRecReqCTe.vb" />
     <Compile Include="src\Requisições\MDFe\ConsNaoEncerradosReqMDFe.vb" />
+    <Compile Include="src\Requisições\MDFe\IncluirDFeReqMDFe.vb" />
     <Compile Include="src\Requisições\NFCe\DownloadEventoReqNFCe.vb" />
     <Compile Include="src\Requisições\NFCe\Impressao.vb" />
+    <Compile Include="src\Requisições\_Genéricas\IncluirDFeReq.vb" />
     <Compile Include="src\Requisições\_Genéricas\NaoEmbReq.vb" />
     <Compile Include="src\Requisições\MDFe\EncerrarReqMDFe.vb" />
     <Compile Include="src\Requisições\MDFe\CancelarReqMDFe.vb" />
@@ -185,6 +187,7 @@
     <Compile Include="src\Respostas\NFe\RetEventoNFe.vb" />
     <Compile Include="src\Respostas\NFe\RetornoInutNFe.vb" />
     <Compile Include="src\Respostas\_Genéricas\ConsNaoEncerradosResp.vb" />
+    <Compile Include="src\Respostas\_Genéricas\IncluirDFeResp.vb" />
     <Compile Include="src\Respostas\_Genéricas\InutilizarResp.vb" />
     <Compile Include="src\Respostas\_Genéricas\NaoEmbResp.vb" />
     <Compile Include="src\Respostas\_Genéricas\IncCondutorResp.vb" />

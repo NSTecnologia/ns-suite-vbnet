@@ -40,6 +40,7 @@
     Public Property MDFeConsSit As String = "https://mdfe.ns.eti.br/mdfe/stats"
     Public Property MDFePrevia As String = "https://mdfe.ns.eti.br/util/preview/mdfe"
     Public Property MDFeListarNSNRecs As String = "https://mdfe.ns.eti.br/util/list/nsnrecs"
+    Public Property MDFeIncluirDFe As String = "https://mdfe.ns.eti.br/mdfe/adddfe"
 
     'NFC-e
     Public Property NFCeEnvio As String = "https://nfce.ns.eti.br/v1/nfce/issue"

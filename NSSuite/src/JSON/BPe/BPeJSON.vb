@@ -138,6 +138,11 @@
         Public Property idfTravessia As IdfTravessia
     End Class
 
+    Public Class CompPag
+        Public Property tpComp As String
+        Public Property vComp As String
+    End Class
+
     Public Class InfValorBPe
         Public Property vBP As String
         Public Property vDesconto As String
@@ -145,7 +150,7 @@
         Public Property vTroco As String
         Public Property tpDesconto As String
         Public Property xDesconto As String
-        Public Property Comp As Comp()
+        Public Property Comp As List(Of CompPag)
     End Class
 
     Public Class ICMS00
@@ -247,11 +252,11 @@
         Public Property agencia As Agencia
         Public Property infBPeSub As InfBPeSub
         Public Property infPassagem As InfPassagem
-        Public Property infViagem As InfViagem()
+        Public Property infViagem As List(Of InfViagem)
         Public Property infValorBPe As InfValorBPe
         Public Property imp As Imp
-        Public Property pag As Pag()
-        Public Property autXML As AutXML()
+        Public Property pag As List(Of Pag)
+        Public Property autXML As List(Of AutXML)
         Public Property infAdic As InfAdic
     End Class
 

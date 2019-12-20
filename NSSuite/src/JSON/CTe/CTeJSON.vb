@@ -70,7 +70,7 @@
 
     Public Class Fluxo
         Public Property xOrig As String
-        Public Property pass As Pass()
+        Public Property pass As List(Of Pass)
         Public Property xDest As String
         Public Property xRota As String
     End Class
@@ -133,8 +133,8 @@
         Public Property origCalc As String
         Public Property destCalc As String
         Public Property xObs As String
-        Public Property ObsCont As ObsCont()
-        Public Property ObsFisco As ObsFisco()
+        Public Property ObsCont As List(Of ObsCont)
+        Public Property ObsFisco As List(Of ObsFisco)
     End Class
 
     Public Class EnderEmit
@@ -260,7 +260,7 @@
     Public Class VPrest
         Public Property vTPrest As String
         Public Property vRec As String
-        Public Property Comp As Comp()
+        Public Property Comp As List(Of Comp)
     End Class
 
     Public Class ICMS00
@@ -349,7 +349,7 @@
     Public Class InfCarga
         Public Property vCarga As String
         Public Property proPred As String
-        Public Property infQ As InfQ()
+        Public Property infQ As List(Of InfQ)
         Public Property vCargaAverb As String
     End Class
 
@@ -360,7 +360,7 @@
     Public Class InfUnidCarga
         Public Property tpUnidCarga As String
         Public Property idUnidCarga As String
-        Public Property lacUnidCarga As LacUnidCarga()
+        Public Property lacUnidCarga As List(Of LacUnidCarga)
         Public Property qtdRat As String
     End Class
 
@@ -371,8 +371,8 @@
     Public Class InfUnidTransp
         Public Property tpUnidTransp As String
         Public Property idUnidTransp As String
-        Public Property lacUnidTransp As LacUnidTransp()
-        Public Property infUnidCarga As InfUnidCarga()
+        Public Property lacUnidTransp As List(Of LacUnidTransp)
+        Public Property infUnidCarga As List(Of InfUnidCarga)
         Public Property qtdRat As String
     End Class
 
@@ -394,8 +394,8 @@
         Public Property PIN As String
         Public Property dPrev As String
         Public Property unidRat As String
-        Public Property infUnidCarga As InfUnidCarga()
-        Public Property infUnidTransp As InfUnidTransp()
+        Public Property infUnidCarga As List(Of InfUnidCarga)
+        Public Property infUnidTransp As List(Of InfUnidTransp)
     End Class
 
     Public Class InfNFe
@@ -403,8 +403,8 @@
         Public Property PIN As String
         Public Property dPrev As String
         Public Property unidRat As String
-        Public Property infUnidCarga As InfUnidCarga()
-        Public Property infUnidTransp As InfUnidTransp()
+        Public Property infUnidCarga As List(Of InfUnidCarga)
+        Public Property infUnidTransp As List(Of InfUnidTransp)
     End Class
 
     Public Class InfOutro
@@ -419,9 +419,9 @@
     End Class
 
     Public Class InfDoc
-        Public Property infNF As InfNF()
-        Public Property infNFe As InfNFe()
-        Public Property infOutros As InfOutro()
+        Public Property infNF As List(Of InfNF)
+        Public Property infNFe As List(Of InfNFe)
+        Public Property infOutros As List(Of InfOutro)
     End Class
 
     Public Class IdDocAntPap
@@ -437,8 +437,8 @@
     End Class
 
     Public Class IdDocAnt
-        Public Property idDocAntPap As IdDocAntPap()
-        Public Property idDocAntEle As IdDocAntEle()
+        Public Property idDocAntPap As List(Of IdDocAntPap)
+        Public Property idDocAntEle As List(Of IdDocAntEle)
     End Class
 
     Public Class EmiDocAnt
@@ -447,11 +447,11 @@
         Public Property IE As String
         Public Property UF As String
         Public Property xNome As String
-        Public Property idDocAnt As IdDocAnt()
+        Public Property idDocAnt As List(Of IdDocAnt)
     End Class
 
     Public Class DocAnt
-        Public Property emiDocAnt As EmiDocAnt()
+        Public Property emiDocAnt As List(Of EmiDocAnt)
     End Class
 
     Public Class VeicNovo
@@ -478,7 +478,7 @@
 
     Public Class Cobr
         Public Property fat As Fat
-        Public Property dup As Dup()
+        Public Property dup As List(Of Dup)
     End Class
 
     Public Class RefNF
@@ -514,14 +514,14 @@
     End Class
 
     Public Class InfServVinc
-        Public Property infCTeMultimodal As InfCTeMultimodal()
+        Public Property infCTeMultimodal As List(Of InfCTeMultimodal)
     End Class
 
     Public Class InfCTeNorm
         Public Property infCarga As InfCarga
         Public Property infDoc As InfDoc
         Public Property docAnt As DocAnt
-        Public Property veicNovos As VeicNovo()
+        Public Property veicNovos As List(Of VeicNovo)
         Public Property cobr As Cobr
         Public Property infCteSub As InfCteSub
         Public Property infGlobalizado As InfGlobalizado
@@ -547,7 +547,7 @@
         Public Property ide As Ide
         Public Property compl As Compl
         Public Property emit As Emit
-        Public Propertyrem As [Rem]
+        Public Property [rem] As [Rem]
         Public Property exped As Exped
         Public Property receb As Receb
         Public Property dest As Dest
@@ -556,7 +556,7 @@
         Public Property infCTeNorm As InfCTeNorm
         Public Property infCteComp As InfCteComp
         Public Property infCteAnu As InfCteAnu
-        Public Property autXML As AutXML()
+        Public Property autXML As List(Of AutXML)
     End Class
 
     Public Class CTe
@@ -581,7 +581,7 @@
     Public Class Rodo
         Public Property xmlns As String
         Public Property RNTRC As String
-        Public Property occ As Occ()
+        Public Property occ As List(Of Occ)
     End Class
 
     Public Class NatCarga
@@ -612,7 +612,7 @@
         Public Property dPrevAereo As String
         Public Property natCarga As NatCarga
         Public Property tarifa As Tarifa
-        Public Property peri As Peri()
+        Public Property peri As List(Of Peri)
     End Class
 
     Public Class Balsa
@@ -625,7 +625,7 @@
 
     Public Class DetCont
         Public Property nCont As String
-        Public Property lacre As Lacre()
+        Public Property lacre As List(Of Lacre)
         Public Property infDoc As InfDoc
     End Class
 
@@ -633,11 +633,11 @@
         Public Property vPrest As String
         Public Property vAFRMM As String
         Public Property xNavio As String
-        Public Property balsa As Balsa()
+        Public Property balsa As List(Of Balsa)
         Public Property nViag As String
         Public Property direc As String
         Public Property irin As String
-        Public Property detCont As DetCont()
+        Public Property detCont As List(Of DetCont)
     End Class
 
     Public Class EnderFerro
@@ -664,7 +664,7 @@
         Public Property ferrEmi As String
         Public Property vFrete As String
         Public Property chCTeFerroOrigem As String
-        Public Property ferroEnv As FerroEnv()
+        Public Property ferroEnv As List(Of FerroEnv)
     End Class
 
     Public Class Ferrov

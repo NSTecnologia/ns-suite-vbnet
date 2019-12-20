@@ -56,7 +56,7 @@
         Public Property verProc As String
         Public Property dhCont As String
         Public Property xJust As String
-        Public Property NFref As NFref()
+        Public Property NFref As List(Of NFref)
     End Class
 
     Public Class EnderEmit
@@ -276,15 +276,15 @@
         Public Property vDesc As String
         Public Property vOutro As String
         Public Property indTot As String
-        Public Property rastro As Rastro()
-        Public Property DI As DI()
-        Public Property detExport As DetExport()
+        Public Property rastro As List(Of Rastro)
+        Public Property DI As List(Of DI)
+        Public Property detExport As List(Of DetExport)
         Public Property xPed As String
         Public Property nItemPed As String
         Public Property nFCI As String
         Public Property veicProd As VeicProd
         Public Property med As Med
-        Public Property arma As Arma()
+        Public Property arma As List(Of Arma)
         Public Property comb As Comb
         Public Property nRECOPI As String
     End Class
@@ -827,7 +827,7 @@
         Public Property nVol As String
         Public Property pesoL As String
         Public Property pesoB As String
-        Public Property lacres As Lacre()
+        Public Property lacres As List(Of Lacre)
     End Class
 
     Public Class Transp
@@ -835,10 +835,10 @@
         Public Property transporta As Transporta
         Public Property retTransp As RetTransp
         Public Property veicTransp As VeicTransp
-        Public Property reboque As Reboque()
+        Public Property reboque As List(Of Reboque)
         Public Property vagao As String
         Public Property balsa As String
-        Public Property vol As Vol()
+        Public Property vol As List(Of Vol)
     End Class
 
     Public Class Fat
@@ -856,7 +856,7 @@
 
     Public Class Cobr
         Public Property fat As Fat
-        Public Property dup As Dup()
+        Public Property dup As List(Of Dup)
     End Class
 
     Public Class Card
@@ -874,7 +874,7 @@
     End Class
 
     Public Class Pag
-        Public Property detPag As DetPag()
+        Public Property detPag As List(Of DetPag)
         Public Property vTroco As String
     End Class
 
@@ -896,9 +896,9 @@
     Public Class InfAdic
         Public Property infAdFisco As String
         Public Property infCpl As String
-        Public Property obsCont As ObsCont()
-        Public Property obsFisco As ObsFisco()
-        Public Property procRef As ProcRef()
+        Public Property obsCont As List(Of ObsCont)
+        Public Property obsFisco As List(Of ObsFisco)
+        Public Property procRef As List(Of ProcRef)
     End Class
 
     Public Class Exporta
@@ -932,8 +932,8 @@
     Public Class Cana
         Public Property safra As String
         Public Property ref As String
-        Public Property forDia As ForDia()
-        Public Property deduc As Deduc()
+        Public Property forDia As List(Of ForDia)
+        Public Property deduc As List(Of Deduc)
     End Class
 
     Public Class InfNFe
@@ -943,8 +943,8 @@
         Public Property dest As Dest
         Public Property retirada As Retirada
         Public Property entrega As Entrega
-        Public Property autXML As AutXML()
-        Public Property det As Det()
+        Public Property autXML As List(Of AutXML)
+        Public Property det As List(Of Det)
         Public Property total As Total
         Public Property transp As Transp
         Public Property cobr As Cobr

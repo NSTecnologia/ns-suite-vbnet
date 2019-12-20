@@ -4,7 +4,7 @@ Imports Newtonsoft.Json
 Imports System.Threading
 
 Public Class NSSuite
-    Private Shared token As String = "4EB15D6DEDAEBAE3FD0B7B5E5B0AD6D4"
+    Private Shared token As String = "COLOQUE_TOKEN"
     Private Shared Endpoints As New Endpoints
     Private Shared Parametros As New Parametros
 
@@ -97,56 +97,72 @@ Public Class NSSuite
             }
 
             resposta = consultarStatusProcessamento(modelo, ConsStatusProcessamentoReqBPe)
-
             Dim ConsStatusProcessamentoRespBPe = JsonConvert.DeserializeObject(Of ConsStatusProcessamentoRespBPe)(resposta)
             statusConsulta = ConsStatusProcessamentoRespBPe.status
+
+            If (statusConsulta = "-2") Then
+                cStat = ConsStatusProcessamentoRespBPe.cStat
+                If (cStat = "996") Then
+                    motivo = ConsStatusProcessamentoRespBPe.erro.xMotivo
+                    For index As Integer = 0 To 2
+                        Thread.Sleep(6000 - (index * 1000))
+                        resposta = consultarStatusProcessamento(modelo, ConsStatusProcessamentoReqBPe)
+                        statusConsulta = JsonConvert.DeserializeObject(Of ConsStatusProcessamentoRespBPe)(resposta).status
+                        If (statusConsulta <> -2) Then
+                            Exit For
+                        End If
+                    Next
+                Else
+                    motivo = ConsStatusProcessamentoRespBPe.motivo
+                End If
+            End If
 
             'Testa se a consulta foi feita com sucesso (200)
             If (statusConsulta = "200") Then
 
-                cStat = ConsStatusProcessamentoRespBPe.cStat
+                    cStat = ConsStatusProcessamentoRespBPe.cStat
 
-                'Testa se o cStat é igual a 100, pois significa "Autorizado"
-                If (cStat = "100") Then
-                    chBPe = ConsStatusProcessamentoRespBPe.chBPe
+                    'Testa se o cStat é igual a 100, pois significa "Autorizado"
+                    If (cStat = "100") Then
+                        chBPe = ConsStatusProcessamentoRespBPe.chBPe
 
-                    nProt = ConsStatusProcessamentoRespBPe.nProt
+                        nProt = ConsStatusProcessamentoRespBPe.nProt
 
-                    motivo = ConsStatusProcessamentoRespBPe.xMotivo
+                        motivo = ConsStatusProcessamentoRespBPe.xMotivo
 
-                    Dim DownloadReqBPe As New DownloadReqBPe With {
-                        .chBPe = chBPe,
-                        .tpAmb = tpAmb,
-                        .tpDown = tpDown
-                    }
+                        Dim DownloadReqBPe As New DownloadReqBPe With {
+                            .chBPe = chBPe,
+                            .tpAmb = tpAmb,
+                            .tpDown = tpDown
+                        }
 
-                    resposta = downloadDocumentoESalvar(modelo, DownloadReqBPe, caminho, chBPe + "-NFe", exibeNaTela)
+                        resposta = downloadDocumentoESalvar(modelo, DownloadReqBPe, caminho, chBPe + "-NFe", exibeNaTela)
 
-                    Dim DownloadRespBPe = JsonConvert.DeserializeObject(Of DownloadRespBPe)(resposta)
-                    statusDownload = DownloadRespBPe.status
+                        Dim DownloadRespBPe = JsonConvert.DeserializeObject(Of DownloadRespBPe)(resposta)
+                        statusDownload = DownloadRespBPe.status
 
-                    'Testa se houve problema no download
-                    If statusDownload <> "200" Then
-                        motivo = DownloadRespBPe.motivo
+                        'Testa se houve problema no download
+                        If statusDownload <> "200" Then
+                            motivo = DownloadRespBPe.motivo
+                        End If
+                    Else
+                        motivo = ConsStatusProcessamentoRespBPe.xMotivo
                     End If
+                ElseIf statusConsulta = "-2" Then
+                    cStat = ConsStatusProcessamentoRespBPe.erro.cStat
+                    motivo = ConsStatusProcessamentoRespBPe.erro.xMotivo
                 Else
-                    motivo = ConsStatusProcessamentoRespBPe.xMotivo
+                    motivo = ConsStatusProcessamentoRespBPe.motivo
                 End If
-            ElseIf statusConsulta = "-2" Then
-                cStat = ConsStatusProcessamentoRespBPe.erro.cStat
-                motivo = ConsStatusProcessamentoRespBPe.erro.xMotivo
+            ElseIf (statusEnvio = "-5") Then
+                cStat = EmitirRespBPe.erro.cStat
+                motivo = EmitirRespBPe.erro.xMotivo
+            ElseIf (statusEnvio = "-4") OrElse (statusEnvio = "-2") Then
+                motivo = EmitirRespBPe.motivo
+                erros = EmitirRespBPe.erros
             Else
-                motivo = ConsStatusProcessamentoRespBPe.motivo
-            End If
-        ElseIf (statusEnvio = "-5") Then
-            cStat = EmitirRespBPe.erro.cStat
-            motivo = EmitirRespBPe.erro.xMotivo
-        ElseIf (statusEnvio = "-4") OrElse (statusEnvio = "-2") Then
-            motivo = EmitirRespBPe.motivo
-            erros = EmitirRespBPe.erros
-        Else
 
-            Try
+                Try
                 motivo = EmitirRespBPe.motivo
             Catch ex As Exception
                 motivo = EmitirRespBPe.toString()
@@ -607,6 +623,45 @@ Public Class NSSuite
         Return resposta
     End Function
 
+    Public Shared Function incluirDFes(ByVal modelo As String, IncluirDFeReq As IncluirDFeReq) As String
+        Dim urlIncluirDFe As String
+
+        Select Case modelo
+            Case "58"
+                urlIncluirDFe = Endpoints.MDFeIncluirDFe
+            Case Else
+                Throw New Exception("Não definido endpoint de inclusão de condutor para o modelo " + modelo)
+        End Select
+
+        Dim json As String = JsonConvert.SerializeObject(IncluirDFeReq)
+
+        Genericos.gravarLinhaLog(modelo, "[INCLUIR_DFE_DADOS]")
+        Genericos.gravarLinhaLog(modelo, json)
+
+        Dim resposta As String = enviaConteudoParaAPI(json, urlIncluirDFe, "json")
+
+        Genericos.gravarLinhaLog(modelo, "[INCLUIR_DFE_RESPOSTA]")
+        Genericos.gravarLinhaLog(modelo, resposta)
+
+        Return resposta
+    End Function
+
+    Public Shared Function incluirDFesESalvar(ByVal modelo As String, IncluirDFeReq As IncluirDFeReq, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal exibeNaTela As Boolean) As String
+        Dim resposta As String = incluirDFes(modelo, IncluirDFeReq)
+        Dim IncluirDFeResp As New IncluirDFeResp
+        Dim status As String
+
+        IncluirDFeResp = JsonConvert.DeserializeObject(Of IncluirDFeResp)(resposta)
+        status = IncluirDFeResp.status
+
+        If (status = "200") Then
+            Dim respostaDownloadEvento As String = downloadEventoESalvar(modelo, DownloadEventoReq, caminho, chave, "", exibeNaTela)
+        Else
+            MessageBox.Show("Ocorreu um erro ao incluir DFe, veja o retorno da API para mais informações")
+        End If
+
+        Return resposta
+    End Function
 
     'Métodos específicos de NFCe
     Public Shared Function emitirNFCeSincrono(ByVal conteudo As String, ByVal tpConteudo As String, ByVal tpAmb As String, ByVal caminho As String, ByVal Optional exibeNaTela As Boolean = False) As String
@@ -728,6 +783,23 @@ Public Class NSSuite
 
             Dim ConsStatusProcessamentoRespNFe = JsonConvert.DeserializeObject(Of ConsStatusProcessamentoRespNFe)(resposta)
             statusConsulta = ConsStatusProcessamentoRespNFe.status
+
+            If (statusConsulta = "-2") Then
+                cStat = ConsStatusProcessamentoRespNFe.cStat
+                If (cStat = "996") Then
+                    motivo = ConsStatusProcessamentoRespNFe.erro.xMotivo
+                    For index As Integer = 0 To 2
+                        Thread.Sleep(6000 - (index * 1000))
+                        resposta = consultarStatusProcessamento(modelo, ConsStatusProcessamentoReqNFe)
+                        statusConsulta = JsonConvert.DeserializeObject(Of ConsStatusProcessamentoRespNFe)(resposta).status
+                        If (statusConsulta <> -2) Then
+                            Exit For
+                        End If
+                    Next
+                Else
+                    motivo = ConsStatusProcessamentoRespNFe.motivo
+                End If
+            End If
 
             'Testa se a consulta foi feita com sucesso (200)
             If statusConsulta = "200" Then
@@ -951,10 +1023,6 @@ Public Class NSSuite
                 If DownloadReq.tpDown.ToUpper().Contains("X") Then
                     Dim xml As String = DownloadResp.xml
                     Genericos.salvarXML(xml, caminho, nome)
-                    'ElseIf DownloadReq.tpDown.ToUpper().Contains("J") Then
-                    '    Dim json As String = DownloadRet.nfeProc
-                    '    Genericos.salvarJSON(Convert.ToString(json), caminho, nome)
-                    'End If
                 End If
 
                 If DownloadReq.tpDown.ToUpper().Contains("P") Then

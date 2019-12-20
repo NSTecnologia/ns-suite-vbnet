@@ -26,8 +26,8 @@
         Public Property verProc As String
         Public Property UFIni As String
         Public Property UFFim As String
-        Public Property infMunCarrega As InfMunCarrega()
-        Public Property infPercurso As InfPercurso()
+        Public Property infMunCarrega As List(Of InfMunCarrega)
+        Public Property infPercurso As List(Of InfPercurso)
         Public Property dhIniViagem As String
     End Class
 
@@ -63,15 +63,15 @@
     Public Class InfUnidCarga
         Public Property tpUnidCarga As String
         Public Property idUnidCarga As String
-        Public Property lacUnidCarga As LacUnidCarga()
+        Public Property lacUnidCarga As List(Of LacUnidCarga)
         Public Property qtdRat As String
     End Class
 
     Public Class InfUnidTransp
         Public Property tpUnidTransp As String
         Public Property idUnidTransp As String
-        Public Property lacUnidTransp As LacUnidTransp()
-        Public Property infUnidCarga As InfUnidCarga()
+        Public Property lacUnidTransp As List(Of LacUnidTransp)
+        Public Property infUnidCarga As List(Of InfUnidCarga)
         Public Property qtdRat As String
     End Class
 
@@ -88,35 +88,35 @@
         Public Property chCTe As String
         Public Property SegCodBarra As String
         Public Property indReentrega As String
-        Public Property infUnidTransp As InfUnidTransp()
-        Public Property peri As Peri()
+        Public Property infUnidTransp As List(Of InfUnidTransp)
+        Public Property peri As List(Of Peri)
     End Class
 
     Public Class InfNFe
         Public Property chNFe As String
         Public Property SegCodBarra As String
         Public Property indReentrega As String
-        Public Property infUnidTransp As InfUnidTransp()
-        Public Property peri As Peri()
+        Public Property infUnidTransp As List(Of InfUnidTransp)
+        Public Property peri As List(Of Peri)
     End Class
 
     Public Class InfMDFeTransp
         Public Property chMDFe As String
         Public Property indReentrega As String
-        Public Property infUnidTransp As InfUnidTransp()
-        Public Property peri As Peri()
+        Public Property infUnidTransp As List(Of InfUnidTransp)
+        Public Property peri As List(Of Peri)
     End Class
 
     Public Class InfMunDescarga
         Public Property cMunDescarga As String
         Public Property xMunDescarga As String
-        Public Property infCTe As InfCTe()
-        Public Property infNFe As InfNFe()
-        Public Property infMDFeTransp As InfMDFeTransp()
+        Public Property infCTe As List(Of InfCTe)
+        Public Property infNFe As List(Of InfNFe)
+        Public Property infMDFeTransp As List(Of InfMDFeTransp)
     End Class
 
     Public Class InfDoc
-        Public Property infMunDescarga As InfMunDescarga()
+        Public Property infMunDescarga As List(Of InfMunDescarga)
     End Class
 
     Public Class InfResp
@@ -134,7 +134,7 @@
         Public Property infResp As InfResp
         Public Property infSeg As InfSeg
         Public Property nApol As String
-        Public Property nAver As String()
+        Public Property nAver As List(Of String)
     End Class
 
     Public Class Tot
@@ -175,7 +175,7 @@
     End Class
 
     Public Class ValePed
-        Public Property disp As Disp()
+        Public Property disp As List(Of Disp)
     End Class
 
     Public Class InfContratante
@@ -185,9 +185,9 @@
 
     Public Class InfANTT
         Public Property RNTRC As String
-        Public Property infCIOT As InfCIOT()
+        Public Property infCIOT As List(Of InfCIOT)
         Public Property valePed As ValePed
-        Public Property infContratante As InfContratante()
+        Public Property infContratante As List(Of InfContratante)
     End Class
 
     Public Class Prop
@@ -213,7 +213,7 @@
         Public Property capKG As String
         Public Property capM3 As String
         Public Property prop As Prop
-        Public Property condutor As Condutor()
+        Public Property condutor As List(Of Condutor)
         Public Property tpRod As String
         Public Property tpCar As String
         Public Property UF As String
@@ -238,9 +238,9 @@
     Public Class Rodo
         Public Property infANTT As InfANTT
         Public Property veicTracao As VeicTracao
-        Public Property veicReboque As VeicReboque()
+        Public Property veicReboque As List(Of VeicReboque)
         Public Property codAgPorto As String
-        Public Property lacRodo As LacRodo()
+        Public Property lacRodo As List(Of LacRodo)
     End Class
 
     Public Class Aereo
@@ -287,11 +287,11 @@
         Public Property cPrtDest As String
         Public Property prtTrans As String
         Public Property tpNav As String
-        Public Property infTermCarreg As InfTermCarreg()
-        Public Property infTermDescarreg As InfTermDescarreg()
-        Public Property infEmbComb As InfEmbComb()
-        Public Property infUnidCargaVazia As InfUnidCargaVazia()
-        Public Property infUnidTranspVazia As InfUnidTranspVazia()
+        Public Property infTermCarreg As List(Of InfTermCarreg)
+        Public Property infTermDescarreg As List(Of InfTermDescarreg)
+        Public Property infEmbComb As List(Of InfEmbComb)
+        Public Property infUnidCargaVazia As List(Of InfUnidCargaVazia)
+        Public Property infUnidTranspVazia As List(Of InfUnidTranspVazia)
     End Class
 
     Public Class Trem
@@ -314,7 +314,7 @@
 
     Public Class Ferrov
         Public Property trem As Trem
-        Public Property vag As Vag()
+        Public Property vag As List(Of Vag)
     End Class
 
     Public Class InfModal
@@ -331,10 +331,10 @@
         Public Property ide As Ide
         Public Property emit As Emit
         Public Property infDoc As InfDoc
-        Public Property seg As Seg()
+        Public Property seg As List(Of Seg)
         Public Property tot As Tot
-        Public Property lacres As Lacre()
-        Public Property autXML As AutXML()
+        Public Property lacres As List(Of Lacre)
+        Public Property autXML As List(Of AutXML)
         Public Property infAdic As InfAdic
         Public Property infModal As InfModal
     End Class
