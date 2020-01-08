@@ -24,7 +24,7 @@ Public Class Genericos
     End Sub
 
     Public Shared Sub gravarLinhaLog(ByVal modelo As String, ByVal conteudo As String)
-        Dim caminho As String = Application.StartupPath & "C:\log\"
+        Dim caminho As String = Application.StartupPath & "\log\"
         Console.Write(caminho)
 
         If Not Directory.Exists(caminho) Then
