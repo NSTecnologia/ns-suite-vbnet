@@ -76,13 +76,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmTeste.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmTeste.Designer.vb">
-      <DependentUpon>frmTeste.vb</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -226,9 +219,6 @@
     <Compile Include="src\Respostas\CTe\EmitirRespCTe.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmTeste.resx">
-      <DependentUpon>frmTeste.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
