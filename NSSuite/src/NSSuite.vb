@@ -4,7 +4,7 @@ Imports Newtonsoft.Json
 Imports System.Threading
 
 Public Class NSSuite
-    Private Shared token As String = "COLOQUE_TOKEN"
+    Private Shared token As String = "SEU_TOKEN"
     Private Shared Endpoints As New Endpoints
     Private Shared Parametros As New Parametros
 
@@ -61,7 +61,7 @@ Public Class NSSuite
     End Function
 
     'Métodos específicos de BPe
-    Public Shared Function emitirBPeSincrono(ByVal conteudo As String, ByVal tpConteudo As String, ByVal CNPJ As String, ByVal tpDown As String, ByVal tpAmb As String, ByVal caminho As String, ByVal Optional exibeNaTela As Boolean = False) As String
+    Public Shared Function emitirBPeSincrono(ByVal conteudo As String, ByVal tpConteudo As String, ByVal CNPJ As String, ByVal tpDown As String, ByVal tpAmb As String, ByVal caminho As String, ByVal Optional exibeNaTela As Boolean = False, ByVal Optional a3 As Boolean = False) As String
         Dim statusEnvio, statusConsulta, statusDownload, motivo, nsNRec, chBPe, cStat, nProt As String
         Dim retorno, resposta As String
         Dim erros As IList(Of String) = {}
@@ -78,7 +78,7 @@ Public Class NSSuite
 
         Genericos.gravarLinhaLog(modelo, "[EMISSAO_SINCRONA_INICIO]")
 
-        resposta = emitirDocumento(modelo, conteudo, tpConteudo)
+        resposta = emitirDocumento(modelo, conteudo, tpConteudo, CNPJ, a3)
 
         Dim EmitirRespBPe = JsonConvert.DeserializeObject(Of EmitirRespBPe)(resposta)
         statusEnvio = EmitirRespBPe.status
@@ -120,52 +120,52 @@ Public Class NSSuite
             'Testa se a consulta foi feita com sucesso (200)
             If (statusConsulta = "200") Then
 
-                    cStat = ConsStatusProcessamentoRespBPe.cStat
+                cStat = ConsStatusProcessamentoRespBPe.cStat
 
-                    'Testa se o cStat é igual a 100, pois significa "Autorizado"
-                    If (cStat = "100") Then
-                        chBPe = ConsStatusProcessamentoRespBPe.chBPe
+                'Testa se o cStat é igual a 100, pois significa "Autorizado"
+                If (cStat = "100") Then
+                    chBPe = ConsStatusProcessamentoRespBPe.chBPe
 
-                        nProt = ConsStatusProcessamentoRespBPe.nProt
+                    nProt = ConsStatusProcessamentoRespBPe.nProt
 
-                        motivo = ConsStatusProcessamentoRespBPe.xMotivo
+                    motivo = ConsStatusProcessamentoRespBPe.xMotivo
 
-                        Dim DownloadReqBPe As New DownloadReqBPe With {
+                    Dim DownloadReqBPe As New DownloadReqBPe With {
                             .chBPe = chBPe,
                             .tpAmb = tpAmb,
                             .tpDown = tpDown
                         }
 
-                        resposta = downloadDocumentoESalvar(modelo, DownloadReqBPe, caminho, chBPe + "-NFe", exibeNaTela)
+                    resposta = downloadDocumentoESalvar(modelo, DownloadReqBPe, caminho, chBPe + "-NFe", exibeNaTela)
 
-                        Dim DownloadRespBPe = JsonConvert.DeserializeObject(Of DownloadRespBPe)(resposta)
-                        statusDownload = DownloadRespBPe.status
+                    Dim DownloadRespBPe = JsonConvert.DeserializeObject(Of DownloadRespBPe)(resposta)
+                    statusDownload = DownloadRespBPe.status
 
-                        'Testa se houve problema no download
-                        If statusDownload <> "200" Then
-                            motivo = DownloadRespBPe.motivo
-                        End If
-                    Else
-                        motivo = ConsStatusProcessamentoRespBPe.xMotivo
+                    'Testa se houve problema no download
+                    If statusDownload <> "200" Then
+                        motivo = DownloadRespBPe.motivo
                     End If
-                ElseIf statusConsulta = "-2" Then
-                    cStat = ConsStatusProcessamentoRespBPe.erro.cStat
-                    motivo = ConsStatusProcessamentoRespBPe.erro.xMotivo
                 Else
-                    motivo = ConsStatusProcessamentoRespBPe.motivo
+                    motivo = ConsStatusProcessamentoRespBPe.xMotivo
                 End If
-            ElseIf (statusEnvio = "-5") Then
-                cStat = EmitirRespBPe.erro.cStat
-                motivo = EmitirRespBPe.erro.xMotivo
-            ElseIf (statusEnvio = "-4") OrElse (statusEnvio = "-2") Then
-                motivo = EmitirRespBPe.motivo
-                erros = EmitirRespBPe.erros
+            ElseIf statusConsulta = "-2" Then
+                cStat = ConsStatusProcessamentoRespBPe.erro.cStat
+                motivo = ConsStatusProcessamentoRespBPe.erro.xMotivo
             Else
+                motivo = ConsStatusProcessamentoRespBPe.motivo
+            End If
+        ElseIf (statusEnvio = "-5") Then
+            cStat = EmitirRespBPe.erro.cStat
+            motivo = EmitirRespBPe.erro.xMotivo
+        ElseIf (statusEnvio = "-4") OrElse (statusEnvio = "-2") Then
+            motivo = EmitirRespBPe.motivo
+            erros = EmitirRespBPe.erros
+        Else
 
-                Try
+            Try
                 motivo = EmitirRespBPe.motivo
             Catch ex As Exception
-                motivo = EmitirRespBPe.toString()
+                motivo = EmitirRespBPe.ToString()
             End Try
         End If
 
@@ -213,7 +213,7 @@ Public Class NSSuite
         Return resposta
     End Function
 
-    Public Shared Function naoEmbarqueESalvar(ByVal modelo As String, NaoEmbReq As NaoEmbReqBPe, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal exibeNaTela As Boolean) As String
+    Public Shared Function naoEmbarqueESalvar(ByVal modelo As String, NaoEmbReq As NaoEmbReqBPe, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal Optional exibeNaTela As Boolean = False) As String
         Dim resposta As String = naoEmbarque(modelo, NaoEmbReq)
         Dim NaoEmbResp As New NaoEmbResp
         Dim status As String
@@ -228,14 +228,14 @@ Public Class NSSuite
                 Dim respostaDownloadEvento As String = downloadEventoESalvar(modelo, DownloadEventoReq, caminho, chave, "", exibeNaTela)
             End If
         Else
-                MessageBox.Show("Ocorreu um erro ao não embarcar, veja o retorno da API para mais informações")
+            MessageBox.Show("Ocorreu um erro ao não embarcar, veja o retorno da API para mais informações")
         End If
 
         Return resposta
     End Function
 
     'Métodos específicos de CTe
-    Public Shared Function emitirCTeSincrono(ByVal conteudo As String, ByVal [mod] As String, ByVal tpConteudo As String, ByVal CNPJ As String, ByVal tpDown As String, ByVal tpAmb As String, ByVal caminho As String, ByVal exibeNaTela As Boolean) As String
+    Public Shared Function emitirCTeSincrono(ByVal conteudo As String, ByVal [mod] As String, ByVal tpConteudo As String, ByVal CNPJ As String, ByVal tpDown As String, ByVal tpAmb As String, ByVal caminho As String, ByVal Optional exibeNaTela As Boolean = False, ByVal Optional a3 As Boolean = False) As String
         Dim statusEnvio, statusConsulta, statusDownload, motivo, nsNRec, chCTe, cStat, nProt As String
         Dim retorno, resposta As String
         Dim erros As IList(Of String) = {}
@@ -252,7 +252,7 @@ Public Class NSSuite
 
         Genericos.gravarLinhaLog(modelo, "[EMISSAO_SINCRONA_INICIO]")
 
-        resposta = emitirDocumento(modelo, conteudo, tpConteudo)
+        resposta = emitirDocumento(modelo, conteudo, tpConteudo, CNPJ, a3)
 
         Dim EmitirRespCTe = JsonConvert.DeserializeObject(Of EmitirRespCTe)(resposta)
         statusEnvio = EmitirRespCTe.status
@@ -311,21 +311,21 @@ Public Class NSSuite
                 erros = ConsStatusProcessamentoRespCTe.erros
             End If
         ElseIf statusEnvio = "-7" Then
-		
+
             motivo = EmitirRespCTe.motivo
             nsNRec = EmitirRespCTe.nsNRec
-			
-        ElseIf statusEnvio = "-4"  Then
+
+        ElseIf statusEnvio = "-4" Then
             motivo = EmitirRespCTe.motivo
 
             Try
                 erros = EmitirRespCTe.erros
             Catch ex As Exception
             End Try
-			
-		ElseIf statusEnvio = "-9" Then
-			motivo = EmitirRespCTe.erro.xMotivo
-			cStat = EmitirRespCTe.erro.cStat
+
+        ElseIf statusEnvio = "-9" Then
+            motivo = EmitirRespCTe.erro.xMotivo
+            cStat = EmitirRespCTe.erro.cStat
         Else
 
             Try
@@ -379,7 +379,7 @@ Public Class NSSuite
         Return resposta
     End Function
 
-    Public Shared Function informarGTVESalvar(ByVal modelo As String, InfGTVReqCTe As InfGTVReqCTe, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal exibeNaTela As Boolean) As String
+    Public Shared Function informarGTVESalvar(ByVal modelo As String, InfGTVReqCTe As InfGTVReqCTe, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal Optional exibeNaTela As Boolean = False) As String
         Dim resposta As String = informarGTV(modelo, InfGTVReqCTe)
         Dim InfGTVRespCTe As New InfGTVRespCTe
         Dim status As String
@@ -398,7 +398,7 @@ Public Class NSSuite
 
 
     'Métodos específicos de MDFe
-    Public Shared Function emitirMDFeSincrono(ByVal conteudo As String, ByVal tpConteudo As String, ByVal CNPJ As String, ByVal tpDown As String, ByVal tpAmb As String, ByVal caminho As String, ByVal Optional exibeNaTela As Boolean = False) As String
+    Public Shared Function emitirMDFeSincrono(ByVal conteudo As String, ByVal tpConteudo As String, ByVal CNPJ As String, ByVal tpDown As String, ByVal tpAmb As String, ByVal caminho As String, ByVal Optional exibeNaTela As Boolean = False, ByVal Optional a3 As Boolean = False) As String
         Dim statusEnvio, statusConsulta, statusDownload, motivo, nsNRec, chMDFe, cStat, nProt As String
         Dim retorno, resposta As String
         Dim erros As IList(Of String) = {}
@@ -415,7 +415,7 @@ Public Class NSSuite
 
         Genericos.gravarLinhaLog(modelo, "[EMISSAO_SINCRONA_INICIO]")
 
-        resposta = emitirDocumento(modelo, conteudo, tpConteudo)
+        resposta = emitirDocumento(modelo, conteudo, tpConteudo, CNPJ, a3)
 
         Dim EmitirRespMDFe = JsonConvert.DeserializeObject(Of EmitirRespMDFe)(resposta)
         statusEnvio = EmitirRespMDFe.status
@@ -543,7 +543,7 @@ Public Class NSSuite
         Return resposta
     End Function
 
-    Public Shared Function encerrarDocumentoESalvar(ByVal modelo As String, EncerrarReq As EncerrarReq, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal exibeNaTela As Boolean) As String
+    Public Shared Function encerrarDocumentoESalvar(ByVal modelo As String, EncerrarReq As EncerrarReq, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal Optional exibeNaTela As Boolean = False) As String
         Dim resposta As String = encerrarDocumento(modelo, EncerrarReq)
         Dim EncerrarResp As New EncerrarResp
         Dim status As String
@@ -583,7 +583,7 @@ Public Class NSSuite
         Return resposta
     End Function
 
-    Public Shared Function incluirCondutorESalvar(ByVal modelo As String, IncCondutorReq As IncCondutorReq, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal exibeNaTela As Boolean) As String
+    Public Shared Function incluirCondutorESalvar(ByVal modelo As String, IncCondutorReq As IncCondutorReq, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal Optional exibeNaTela As Boolean = False) As String
         Dim resposta As String = incluirCondutor(modelo, IncCondutorReq)
         Dim IncCondutorResp As New IncCondutorResp
         Dim status As String
@@ -646,7 +646,7 @@ Public Class NSSuite
         Return resposta
     End Function
 
-    Public Shared Function incluirDFesESalvar(ByVal modelo As String, IncluirDFeReq As IncluirDFeReq, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal exibeNaTela As Boolean) As String
+    Public Shared Function incluirDFesESalvar(ByVal modelo As String, IncluirDFeReq As IncluirDFeReq, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal Optional exibeNaTela As Boolean = False) As String
         Dim resposta As String = incluirDFes(modelo, IncluirDFeReq)
         Dim IncluirDFeResp As New IncluirDFeResp
         Dim status As String
@@ -664,7 +664,7 @@ Public Class NSSuite
     End Function
 
     'Métodos específicos de NFCe
-    Public Shared Function emitirNFCeSincrono(ByVal conteudo As String, ByVal tpConteudo As String, ByVal tpAmb As String, ByVal caminho As String, ByVal Optional exibeNaTela As Boolean = False) As String
+    Public Shared Function emitirNFCeSincrono(ByVal conteudo As String, ByVal tpConteudo As String, ByVal CNPJ As String, ByVal tpAmb As String, ByVal caminho As String, ByVal Optional exibeNaTela As Boolean = False, ByVal Optional a3 As Boolean = False) As String
         Dim statusEnvio, statusDownload, motivo, chNFe, cStat, nProt As String
         Dim retorno, resposta As String
         Dim erros As IList(Of String) = {}
@@ -679,7 +679,7 @@ Public Class NSSuite
 
         Genericos.gravarLinhaLog(modelo, "[EMISSAO_SINCRONA_INICIO]")
 
-        resposta = emitirDocumento(modelo, conteudo, tpConteudo)
+        resposta = emitirDocumento(modelo, conteudo, tpConteudo, CNPJ, a3)
 
         Dim EmitirRespNFCe = JsonConvert.DeserializeObject(Of EmitirRespNFCe)(resposta)
         statusEnvio = EmitirRespNFCe.status
@@ -744,7 +744,7 @@ Public Class NSSuite
 
 
     'Métodos específicos de NFe
-    Public Shared Function emitirNFeSincrono(ByVal conteudo As String, ByVal tpConteudo As String, ByVal CNPJ As String, ByVal tpDown As String, ByVal tpAmb As String, ByVal caminho As String, ByVal Optional exibeNaTela As Boolean = False) As String
+    Public Shared Function emitirNFeSincrono(ByVal conteudo As String, ByVal tpConteudo As String, ByVal CNPJ As String, ByVal tpDown As String, ByVal tpAmb As String, ByVal caminho As String, ByVal Optional exibeNaTela As Boolean = False, ByVal Optional a3 As Boolean = False) As String
         Dim statusEnvio, statusConsulta, statusDownload, motivo, nsNRec, chNFe, cStat, nProt As String
         Dim retorno, resposta As String
         Dim erros As IList(Of String) = {}
@@ -761,7 +761,7 @@ Public Class NSSuite
 
         Genericos.gravarLinhaLog(modelo, "[EMISSAO_SINCRONA_INICIO]")
 
-        resposta = emitirDocumento(modelo, conteudo, tpConteudo)
+        resposta = emitirDocumento(modelo, conteudo, tpConteudo, CNPJ, a3)
 
         Dim EmitirRespNFe = JsonConvert.DeserializeObject(Of EmitirRespNFe)(resposta)
         statusEnvio = EmitirRespNFe.status
@@ -885,25 +885,44 @@ Public Class NSSuite
 
 
     'Métodos genéricos, compartilhados entre diversas funções
-    Public Shared Function emitirDocumento(ByVal modelo As String, ByVal conteudo As String, ByVal tpConteudo As String) As String
+    Public Shared Function emitirDocumento(ByVal modelo As String, ByVal conteudo As String, ByVal tpConteudo As String, ByVal cnpjEmitente As String, ByVal a3 As Boolean) As String
         Dim urlEnvio As String
-
+        Dim nodo As String
         Select Case modelo
             Case "63"
                 urlEnvio = Endpoints.BPeEnvio
+                nodo = "infBPe"
             Case "57"
                 urlEnvio = Endpoints.CTeEnvio
+                nodo = "infCTe"
             Case "67"
                 urlEnvio = Endpoints.CTeOSEnvio
+                nodo = "infCTe"
             Case "58"
                 urlEnvio = Endpoints.MDFeEnvio
+                nodo = "infMDFe"
             Case "65"
                 urlEnvio = Endpoints.NFCeEnvio
+                nodo = "infNFe"
             Case "55"
                 urlEnvio = Endpoints.NFeEnvio
+                nodo = "infNFe"
             Case Else
                 Throw New Exception("Não definido endpoint de envio para o modelo " + modelo)
         End Select
+
+        If (a3) Then
+            Dim xml As String
+            Try
+                If ("JSON".Equals(tpConteudo.ToUpper()) Or "TXT".Equals(tpConteudo.ToUpper())) Then
+                    tpConteudo = "xml"
+                Else
+                    xml = conteudo
+                End If
+            Catch ex As Exception
+
+            End Try
+        End If
 
         Genericos.gravarLinhaLog(modelo, "[ENVIO_DADOS]")
         Genericos.gravarLinhaLog(modelo, conteudo)
@@ -993,7 +1012,7 @@ Public Class NSSuite
         Return resposta
     End Function
 
-    Public Shared Function downloadDocumentoESalvar(ByVal modelo As String, DownloadReq As DownloadReq, ByVal caminho As String, ByVal nome As String, ByVal exibeNaTela As Boolean) As String
+    Public Shared Function downloadDocumentoESalvar(ByVal modelo As String, DownloadReq As DownloadReq, ByVal caminho As String, ByVal nome As String, ByVal Optional exibeNaTela As Boolean = False) As String
         Dim resposta As String = downloadDocumento(modelo, DownloadReq)
         Dim DownloadResp As New DownloadResp
         Dim DownloadRespNFCe As New DownloadRespNFCe
@@ -1100,7 +1119,7 @@ Public Class NSSuite
         Return resposta
     End Function
 
-    Public Shared Function downloadEventoESalvar(ByVal modelo As String, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal nSeqEvento As String, ByVal exibeNaTela As Boolean) As String
+    Public Shared Function downloadEventoESalvar(ByVal modelo As String, DownloadEventoReq As DownloadEventoReq, ByVal caminho As String, ByVal chave As String, ByVal nSeqEvento As String, ByVal Optional exibeNaTela As Boolean = False) As String
         Dim resposta As String = downloadEvento(modelo, DownloadEventoReq)
         Dim tpEventoSalvar As String = ""
         Dim DownloadEventoResp As New DownloadEventoResp
@@ -1132,8 +1151,8 @@ Public Class NSSuite
                 ElseIf DownloadEventoReq.tpEvento.ToUpper().Equals("ENC") Then
                     tpEventoSalvar = "110115"
                 Else
-                    
-					tpEventoSalvar = "110110"
+
+                    tpEventoSalvar = "110110"
                 End If
 
                 'Verifica quais arquivos deve salvar
@@ -1155,7 +1174,7 @@ Public Class NSSuite
                         End If
                     End If
                 End If
-                Else
+            Else
 
                 Dim xml As String = DownloadRespNFCe.nfeProc.xml
                 Genericos.salvarXML(xml, caminho, tpEventoSalvar & chave & nSeqEvento & "-procEven")
