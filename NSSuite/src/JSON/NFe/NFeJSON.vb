@@ -566,7 +566,6 @@
         Public Property ICMSSN202 As ICMSSN202
         Public Property ICMSSN500 As ICMSSN500
         Public Property ICMSSN900 As ICMSSN900
-        Public Property ICMSUFDest As ICMSUFDest
     End Class
 
     Public Class IPITrib
@@ -706,6 +705,7 @@
     Public Class Imposto
         Public Property vTotTrib As String
         Public Property ICMS As ICMS
+        Public Property ICMSUFDest As ICMSUFDest
         Public Property IPI As IPI
         Public Property II As II
         Public Property PIS As PIS
@@ -714,10 +714,14 @@
         Public Property COFINSST As COFINSST
         Public Property ISSQN As ISSQN
     End Class
-
+    
+    Public Class IPIDevol
+        Public Property vIPIDevol As String  
+    End Class
+    
     Public Class ImpostoDevol
         Public Property pDevol As String
-        Public Property IPI As IPI
+        Public Property IPI As IPIDevol
     End Class
 
     Public Class Det
