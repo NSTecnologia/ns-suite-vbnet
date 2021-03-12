@@ -52,6 +52,7 @@
         Public Property finNFe As String
         Public Property indFinal As String
         Public Property indPres As String
+        Public Property indIntermed as String
         Public Property procEmi As String
         Public Property verProc As String
         Public Property dhCont As String
@@ -882,6 +883,10 @@
         Public Property vTroco As String
     End Class
 
+    Public Class InfIntermed
+        Public Property CNPJ as String
+        Public Property idCadIntTrand as String
+
     Public Class ObsCont
         Public Property xCampo As String
         Public Property xTexto As String
@@ -953,6 +958,7 @@
         Public Property transp As Transp
         Public Property cobr As Cobr
         Public Property pag As Pag
+        Public Property infIntermed as InfIntermed
         Public Property infAdic As InfAdic
         Public Property exporta As Exporta
         Public Property compra As Compra
