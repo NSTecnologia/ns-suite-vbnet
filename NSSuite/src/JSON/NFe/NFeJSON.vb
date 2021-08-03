@@ -884,8 +884,9 @@
     End Class
 
     Public Class InfIntermed
-        Public Property CNPJ as String
-        Public Property idCadIntTrand as String
+        Public Property CNPJ As String
+        Public Property idCadIntTrand As String
+    End Class
 
     Public Class ObsCont
         Public Property xCampo As String
