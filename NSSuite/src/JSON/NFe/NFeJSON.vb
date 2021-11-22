@@ -883,6 +883,15 @@
         Public Property vTroco As String
     End Class
 
+    Public Class InfRespTec
+        Public Property CNPJ
+        Public Property xContato
+        Public Property email
+        Public Property fone
+        Public Property idCSRT
+        Public Property hashCSRT
+    End Class
+
     Public Class InfIntermed
         Public Property CNPJ As String
         Public Property idCadIntTrand As String
@@ -948,6 +957,7 @@
 
     Public Class InfNFe
         Public Property versao As String
+        Public Property Id As String
         Public Property ide As Ide
         Public Property emit As Emit
         Public Property dest As Dest
@@ -959,6 +969,7 @@
         Public Property transp As Transp
         Public Property cobr As Cobr
         Public Property pag As Pag
+        Public Property infRespTec As InfRespTec
         Public Property infIntermed as InfIntermed
         Public Property infAdic As InfAdic
         Public Property exporta As Exporta

@@ -4,7 +4,7 @@ Imports Newtonsoft.Json
 Imports System.Threading
 
 Public Class NSSuite
-    Private Shared token As String = "SEU_TOKEN"
+    Private Shared token As String = "ADQWREQW561D32AWS1D6"
     Private Shared Endpoints As New Endpoints
     Private Shared Parametros As New Parametros
 
@@ -47,11 +47,11 @@ Public Class NSSuite
 
                 Select Case CInt(response.StatusCode)
                     Case 401
-                        MessageBox.Show("Token não enviado ou inválido")
+                        MessageBox.Show("Token nao enviado ou invalido")
                     Case 403
-                        MessageBox.Show("Token sem permissão")
+                        MessageBox.Show("Token sem permissao")
                     Case 404
-                        MessageBox.Show("Não encontrado, verifique o retorno para mais informações")
+                        MessageBox.Show("Nao encontrado, verifique o retorno para mais informacoes")
                     Case Else
                 End Select
             End If
