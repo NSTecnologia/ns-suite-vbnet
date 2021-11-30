@@ -4,7 +4,7 @@ Imports Newtonsoft.Json
 Imports System.Threading
 
 Public Class NSSuite
-    Private Shared token As String = "ADQWREQW561D32AWS1D6"
+    Private Shared token As String = "SEU_TOKEN_AQUI"
     Private Shared Endpoints As New Endpoints
     Private Shared Parametros As New Parametros
 
