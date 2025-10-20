@@ -1,4 +1,12 @@
-﻿Namespace src.JSON.CTe
+﻿Imports System.Collections.Generic
+
+Namespace src.JSON.CTe
+
+    Public Class CTeJSON
+        Public Property CTe As CTe
+        Public Property infModal As InfModal
+    End Class
+
     Public Class Toma3
         Public Property toma As String
     End Class
@@ -62,6 +70,7 @@
         Public Property toma4 As Toma4
         Public Property dhCont As String
         Public Property xJust As String
+        Public Property gCompraGov As gCompraGov
     End Class
 
     Public Class Pass
@@ -171,7 +180,7 @@
         Public Property xPais As String
     End Class
 
-    Public Class [Rem]
+    Public Class Remetente
         Public Property CNPJ As String
         Public Property CPF As String
         Public Property IE As String
@@ -338,6 +347,8 @@
         Public Property vTotTrib As String
         Public Property infAdFisco As String
         Public Property ICMSUFFim As ICMSUFFim
+        Public Property vTotDFe As String
+        Public Property IBSCBS As IBSCBS
     End Class
 
     Public Class InfQ
@@ -353,27 +364,8 @@
         Public Property vCargaAverb As String
     End Class
 
-    Public Class LacUnidCarga
-        Public Property nLacre As String
-    End Class
-
-    Public Class InfUnidCarga
-        Public Property tpUnidCarga As String
-        Public Property idUnidCarga As String
-        Public Property lacUnidCarga As List(Of LacUnidCarga)
-        Public Property qtdRat As String
-    End Class
-
     Public Class LacUnidTransp
         Public Property nLacre As String
-    End Class
-
-    Public Class InfUnidTransp
-        Public Property tpUnidTransp As String
-        Public Property idUnidTransp As String
-        Public Property lacUnidTransp As List(Of LacUnidTransp)
-        Public Property infUnidCarga As List(Of InfUnidCarga)
-        Public Property qtdRat As String
     End Class
 
     Public Class InfNF
@@ -393,7 +385,6 @@
         Public Property nPeso As String
         Public Property PIN As String
         Public Property dPrev As String
-        Public Property unidRat As String
         Public Property infUnidCarga As List(Of InfUnidCarga)
         Public Property infUnidTransp As List(Of InfUnidTransp)
     End Class
@@ -402,9 +393,27 @@
         Public Property chave As String
         Public Property PIN As String
         Public Property dPrev As String
-        Public Property unidRat As String
         Public Property infUnidCarga As List(Of InfUnidCarga)
         Public Property infUnidTransp As List(Of InfUnidTransp)
+    End Class
+
+    Public Class LacUnidCarga
+        Public Property nLacre As String
+    End Class
+
+    Public Class InfUnidCarga
+        Public Property tpUnidCarga As String
+        Public Property idUnidCarga As String
+        Public Property lacUnidCarga As List(Of LacUnidCarga)
+        Public Property qtdRat As String
+    End Class
+
+    Public Class InfUnidTransp
+        Public Property tpUnidTransp As String
+        Public Property idUnidTransp As String
+        Public Property lacUnidTransp As List(Of LacUnidTransp)
+        Public Property infUnidCarga As List(Of InfUnidCarga)
+        Public Property qtdRat As String
     End Class
 
     Public Class InfOutro
@@ -414,8 +423,8 @@
         Public Property dEmi As String
         Public Property vDocFisc As String
         Public Property dPrev As String
-        Public Property infUnidCarga As InfUnidCarga()
-        Public Property infUnidTransp As InfUnidTransp()
+        Public Property infUnidCarga As List(Of InfUnidCarga)
+        Public Property infUnidTransp As List(Of InfUnidTransp)
     End Class
 
     Public Class InfDoc
@@ -509,12 +518,12 @@
         Public Property xObs As String
     End Class
 
-    Public Class InfCTeMultimodal
+    Public Class InfCteMultimodal
         Public Property chCTeMultimodal As String
     End Class
 
     Public Class InfServVinc
-        Public Property infCTeMultimodal As List(Of InfCTeMultimodal)
+        Public Property infCteMultimodal As List(Of InfCteMultimodal)
     End Class
 
     Public Class InfCTeNorm
@@ -547,7 +556,7 @@
         Public Property ide As Ide
         Public Property compl As Compl
         Public Property emit As Emit
-        Public Property [rem] As [Rem]
+        Public Property rem As Remetente
         Public Property exped As Exped
         Public Property receb As Receb
         Public Property dest As Dest
@@ -557,6 +566,7 @@
         Public Property infCteComp As InfCteComp
         Public Property infCteAnu As InfCteAnu
         Public Property autXML As List(Of AutXML)
+        Public Property infRespTec As InfRespTec
     End Class
 
     Public Class CTe
@@ -565,7 +575,7 @@
 
     Public Class EmiOcc
         Public Property CNPJ As String
-        Public Property [cInt] As String
+        Public Property cInt As String
         Public Property IE As String
         Public Property UF As String
         Public Property fone As String
@@ -586,7 +596,7 @@
 
     Public Class NatCarga
         Public Property xDime As String
-        Public Property cInfManu As String
+        Public Property cInfManu As List(Of String)
     End Class
 
     Public Class Tarifa
@@ -653,7 +663,7 @@
 
     Public Class FerroEnv
         Public Property CNPJ As String
-        Public Property [cInt] As String
+        Public Property cInt As String
         Public Property IE As String
         Public Property xNome As String
         Public Property enderFerro As EnderFerro
@@ -677,6 +687,11 @@
         Public Property vTar As String
         Public Property dIni As String
         Public Property dFim As String
+        Public Property classDuto As String
+        Public Property tpContratacao As String
+        Public Property codPontoEntrada As String
+        Public Property codPontoSaida As String
+        Public Property nContrato As String
     End Class
 
     Public Class InfSeg
@@ -706,10 +721,96 @@
         Public Property multimodal As Multimodal
     End Class
 
-    Public Class CTeJSON
-        Public Property CTe As CTe
-        Public Property infModal As InfModal
+    Public Class InfRespTec
+        Public Property CNPJ As String
+        Public Property xContato As String
+        Public Property email As String
+        Public Property fone As String
     End Class
 
+    Public Class IBSCBS
+        Public Property CST As String
+        Public Property cClassTrib As String
+        Public Property indDoacao As String
+        Public Property gIBSCBS As gIBSCBS
+        Public Property gEstornoCred As gEstornoCred
+    End Class
 
+    Public Class gIBSCBS
+        Public Property vBC As String
+        Public Property vIBS As String
+        Public Property gIBSUF As gIBSUF
+        Public Property gIBSMun As gIBSMun
+        Public Property gCBS As gCBS
+        Public Property gTribRegular As gTribRegular
+        Public Property gTribCompraGov As gTribCompraGov
+    End Class
+
+    Public Class gIBSUF
+        Public Property pIBSUF As String
+        Public Property vIBSUF As String
+        Public Property gDif As gDif
+        Public Property gDevTrib As gDevTrib
+        Public Property gRed As gRed
+    End Class
+
+    Public Class gDif
+        Public Property pDif As String
+        Public Property vDif As String
+    End Class
+
+    Public Class gDevTrib
+        Public Property vDevTrib As String
+    End Class
+
+    Public Class gRed
+        Public Property pRedAliq As String
+        Public Property pAliqEfet As String
+    End Class
+
+    Public Class gIBSMun
+        Public Property pIBSMun As String
+        Public Property vIBSMun As String
+        Public Property gDif As gDif
+        Public Property gDevTrib As gDevTrib
+        Public Property gRed As gRed
+    End Class
+
+    Public Class gCBS
+        Public Property pCBS As String
+        Public Property vCBS As String
+        Public Property gDif As gDif
+        Public Property gDevTrib As gDevTrib
+        Public Property gRed As gRed
+    End Class
+
+    Public Class gTribRegular
+        Public Property CSTReg As String
+        Public Property cClassTribReg As String
+        Public Property pAliqEfetRegIBSUF As String
+        Public Property vTribRegIBSUF As String
+        Public Property pAliqEfetRegIBSMun As String
+        Public Property vTribRegIBSMun As String
+        Public Property pAliqEfetRegCBS As String
+        Public Property vTribRegCBS As String
+    End Class
+
+    Public Class gEstornoCred
+        Public Property vIBSEstCred As gEstornoCred
+        Public Property vCBSEstCred As gEstornoCred
+    End Class
+
+    Public Class gTribCompraGov
+        Public Property pAliqIBSUF As String
+        Public Property vTribIBSUF As String
+        Public Property pAliqIBSMun As String
+        Public Property vTribIBSMun As String
+        Public Property pAliqCBS As String
+        Public Property vTribCBS As String
+    End Class
+
+    Public Class gCompraGov
+        Public Property tpEnteGov As String
+        Public Property pRedutor As String
+    End Class
 End Namespace
